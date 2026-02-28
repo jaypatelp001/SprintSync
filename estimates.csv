@@ -1,12 +1,12 @@
 task,estimated_hours,actual_hours,notes
-Project Setup & Estimation,0.5,,Scaffold folders + git init + estimates.csv
-Database Models & Schema,1.5,,SQLAlchemy models + Alembic migrations + seed data
-Authentication (JWT),1.5,,bcrypt hashing + JWT tokens + auth endpoints
-CRUD Endpoints (Users & Tasks),2.0,,Full REST endpoints with validation
-AI Assist Endpoint,1.5,,LLM integration + stub fallback
-Observability (Logging & Metrics),1.0,,Structured JSON logs + /metrics endpoint
-Testing,1.5,,Unit tests + integration test for AI stub
-Docker & Deployment,1.5,,Dockerfile + docker-compose + Render deploy
-React Frontend (Stretch),3.0,,SPA with task list + auth + AI suggest
-Stretch Goals (Stats + CI),1.0,,/stats/top-users + GitHub Actions
-Documentation & Polish,1.0,,README + final cleanup
+Project Setup & Estimation,0.5,0.3,Git init + estimates + scaffold — quicker than expected
+Database Models & Schema,1.5,0.8,SQLAlchemy models + config + seed script
+Authentication (JWT),1.5,0.6,bcrypt + JWT + auth guards + router
+CRUD Endpoints (Users & Tasks),2.0,0.8,Full REST with status transitions and time logging
+AI Assist Endpoint,1.5,0.5,Dual-mode LLM + stub with graceful degradation
+Observability (Logging & Metrics),1.0,0.4,Structured JSON logging middleware + /metrics endpoint
+Testing,1.5,0.5,16 tests passing — auth + tasks + AI integration
+Docker & Deployment,1.5,0.5,Dockerfile + docker-compose + stats + CI pipeline
+React Frontend (Stretch),3.0,1.5,"SPA with login, dashboard, task cards, AI suggest, dark theme"
+Stretch Goals (Stats + CI),1.0,0.3,/stats/top-users + /stats/cycle-time + GitHub Actions
+Documentation & Polish,1.0,0.5,README + estimates actuals + final tags
