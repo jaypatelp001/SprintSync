@@ -12,6 +12,16 @@ from app.dependencies import get_current_user, require_admin
 router = APIRouter(prefix="/users", tags=["Users"])
 
 
+@router.get("/directory")
+def user_directory(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """List all users (id + username) for assignment dropdowns. Any authenticated user."""
+    users = db.query(User.id, User.username).order_by(User.username).all()
+    return [{"id": u.id, "username": u.username} for u in users]
+
+
 @router.get("/", response_model=List[UserResponse])
 def list_users(
     db: Session = Depends(get_db),

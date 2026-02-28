@@ -17,7 +17,7 @@ const TRANSITIONS = {
     done: ['todo'],
 };
 
-export default function TaskCard({ task, onEdit, onStatusChange, onDelete, onLogTime }) {
+export default function TaskCard({ task, userMap, onEdit, onStatusChange, onDelete, onLogTime }) {
     const [showTimeInput, setShowTimeInput] = useState(false);
     const [minutes, setMinutes] = useState('');
 
@@ -50,7 +50,7 @@ export default function TaskCard({ task, onEdit, onStatusChange, onDelete, onLog
 
             <div className="task-meta">
                 <span className="time-badge">⏱️ {task.total_minutes} min</span>
-                {task.assignee_id && <span className="assignee-badge">👤 User #{task.assignee_id}</span>}
+                {task.assignee_id && <span className="assignee-badge">👤 {userMap[task.assignee_id] || `User #${task.assignee_id}`}</span>}
             </div>
 
             <div className="task-card-footer">

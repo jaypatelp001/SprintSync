@@ -23,6 +23,7 @@ export default function Dashboard({ user, onLogout }) {
     const [loading, setLoading] = useState(true);
     const [dailyPlan, setDailyPlan] = useState(null);
     const [planLoading, setPlanLoading] = useState(false);
+    const [userMap, setUserMap] = useState({});
 
     const loadTasks = async () => {
         setLoading(true);
@@ -41,6 +42,13 @@ export default function Dashboard({ user, onLogout }) {
 
     useEffect(() => {
         loadTasks();
+        api.listUsers()
+            .then(users => {
+                const map = {};
+                users.forEach(u => { map[u.id] = u.username; });
+                setUserMap(map);
+            })
+            .catch(() => { });
     }, [statusFilter]);
 
     const handleCreateTask = () => {
@@ -208,6 +216,7 @@ export default function Dashboard({ user, onLogout }) {
                         <TaskCard
                             key={task.id}
                             task={task}
+                            userMap={userMap}
                             onEdit={handleEditTask}
                             onStatusChange={handleStatusChange}
                             onDelete={handleDeleteTask}

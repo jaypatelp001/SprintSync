@@ -1,7 +1,7 @@
 /**
- * TaskModal — Create / Edit task with AI Suggest integration.
+ * TaskModal — Create / Edit task with AI Suggest integration and user dropdown.
  */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { api } from '../api';
 
 export default function TaskModal({ task, onSave, onClose }) {
@@ -12,6 +12,13 @@ export default function TaskModal({ task, onSave, onClose }) {
     const [error, setError] = useState('');
     const [saving, setSaving] = useState(false);
     const [aiLoading, setAiLoading] = useState(false);
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        api.listUsers()
+            .then(setUsers)
+            .catch(() => setUsers([]));
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -101,15 +108,17 @@ export default function TaskModal({ task, onSave, onClose }) {
 
                     <div className="form-row">
                         <div className="form-group">
-                            <label htmlFor="task-assignee">Assignee ID</label>
-                            <input
+                            <label htmlFor="task-assignee">Assign To</label>
+                            <select
                                 id="task-assignee"
-                                type="number"
                                 value={assigneeId}
                                 onChange={(e) => setAssigneeId(e.target.value)}
-                                placeholder="User ID"
-                                min="1"
-                            />
+                            >
+                                <option value="">Unassigned</option>
+                                {users.map(u => (
+                                    <option key={u.id} value={u.id}>{u.username}</option>
+                                ))}
+                            </select>
                         </div>
 
                         <div className="form-group">

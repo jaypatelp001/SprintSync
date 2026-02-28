@@ -130,6 +130,11 @@ class ApiClient {
   metrics() {
     return this.request('/metrics');
   }
+
+  // Users (for dropdown)
+  listUsers() {
+    return this.request('/users/directory');
+  }
 }
 
 export const api = new ApiClient();
