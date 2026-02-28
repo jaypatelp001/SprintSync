@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import engine, Base
-from app.routers import auth, users, tasks, ai, metrics
+from app.routers import auth, users, tasks, ai, metrics, stats
 from app.middleware.logging import RequestLoggingMiddleware
 
 # Create tables on startup (dev convenience — migrations handle production)
@@ -34,6 +34,7 @@ app.include_router(users.router)
 app.include_router(tasks.router)
 app.include_router(ai.router)
 app.include_router(metrics.router)
+app.include_router(stats.router)
 
 
 @app.get("/", tags=["Root"])
