@@ -15,8 +15,8 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 24 hours
     ALGORITHM: str = "HS256"
 
-    # AI
-    OPENAI_API_KEY: str = ""
+    # AI (Google Gemini)
+    GOOGLE_API_KEY: str = ""
     AI_STUB_MODE: bool = True
 
     # App

@@ -1,8 +1,6 @@
-"""AI service — LLM integration with deterministic stub fallback."""
+"""AI service — Google Gemini 2.5 Flash integration with deterministic stub fallback."""
 
-import json
 import logging
-from typing import Optional, List
 from app.config import get_settings
 
 logger = logging.getLogger(__name__)
@@ -39,7 +37,7 @@ def _stub_daily_plan(tasks: list) -> str:
 async def suggest_description(title: str) -> dict:
     """Generate a task description from a short title.
 
-    Uses LLM when available, falls back to deterministic stub.
+    Uses Gemini 2.5 Flash when available, falls back to deterministic stub.
     """
     if settings.AI_STUB_MODE:
         return {
@@ -47,37 +45,26 @@ async def suggest_description(title: str) -> dict:
             "is_stub": True,
         }
 
-    # Live LLM call
+    # Live Gemini call
     try:
-        from openai import OpenAI
+        import google.generativeai as genai
 
-        client = OpenAI(api_key=settings.OPENAI_API_KEY)
+        genai.configure(api_key=settings.GOOGLE_API_KEY)
+        model = genai.GenerativeModel("gemini-2.5-flash")
 
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {
-                    "role": "system",
-                    "content": (
-                        "You are a project management assistant. Given a short task title, "
-                        "generate a clear, concise task description (2-3 sentences) that includes "
-                        "the goal, key deliverables, and suggested approach."
-                    ),
-                },
-                {
-                    "role": "user",
-                    "content": f"Generate a task description for: {title}",
-                },
-            ],
-            max_tokens=200,
-            temperature=0.7,
+        prompt = (
+            "You are a project management assistant. Given a short task title, "
+            "generate a clear, concise task description (2-3 sentences) that includes "
+            "the goal, key deliverables, and suggested approach.\n\n"
+            f"Task title: {title}"
         )
 
-        suggestion = response.choices[0].message.content.strip()
+        response = model.generate_content(prompt)
+        suggestion = response.text.strip()
         return {"suggestion": suggestion, "is_stub": False}
 
     except Exception as e:
-        logger.error(f"LLM call failed: {e}", exc_info=True)
+        logger.error(f"Gemini call failed: {e}", exc_info=True)
         # Graceful degradation — fall back to stub
         return {
             "suggestion": _stub_suggest_description(title),
@@ -89,7 +76,7 @@ async def suggest_description(title: str) -> dict:
 async def suggest_daily_plan(user_tasks: list) -> dict:
     """Generate a concise daily plan based on the user's current tasks.
 
-    Uses LLM when available, falls back to deterministic stub.
+    Uses Gemini 2.5 Flash when available, falls back to deterministic stub.
     """
     task_dicts = [{"title": t.title, "status": t.status.value} for t in user_tasks]
 
@@ -99,41 +86,30 @@ async def suggest_daily_plan(user_tasks: list) -> dict:
             "is_stub": True,
         }
 
-    # Live LLM call
+    # Live Gemini call
     try:
-        from openai import OpenAI
+        import google.generativeai as genai
 
-        client = OpenAI(api_key=settings.OPENAI_API_KEY)
+        genai.configure(api_key=settings.GOOGLE_API_KEY)
+        model = genai.GenerativeModel("gemini-2.5-flash")
 
         tasks_summary = "\n".join(
             f"- {t['title']} (status: {t['status']})" for t in task_dicts
         )
 
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {
-                    "role": "system",
-                    "content": (
-                        "You are a project management assistant. Given a list of tasks with their "
-                        "statuses, create a concise daily plan (5-7 bullet points) prioritizing "
-                        "in-progress work, then reviews, then new items."
-                    ),
-                },
-                {
-                    "role": "user",
-                    "content": f"Create a daily plan for these tasks:\n{tasks_summary}",
-                },
-            ],
-            max_tokens=300,
-            temperature=0.7,
+        prompt = (
+            "You are a project management assistant. Given a list of tasks with their "
+            "statuses, create a concise daily plan (5-7 bullet points) prioritizing "
+            "in-progress work, then reviews, then new items.\n\n"
+            f"Tasks:\n{tasks_summary}"
         )
 
-        suggestion = response.choices[0].message.content.strip()
+        response = model.generate_content(prompt)
+        suggestion = response.text.strip()
         return {"suggestion": suggestion, "is_stub": False}
 
     except Exception as e:
-        logger.error(f"LLM call failed: {e}", exc_info=True)
+        logger.error(f"Gemini call failed: {e}", exc_info=True)
         return {
             "suggestion": _stub_daily_plan(task_dicts),
             "is_stub": True,
