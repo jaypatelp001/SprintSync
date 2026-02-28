@@ -29,7 +29,7 @@ services:
       DATABASE_URL: postgresql://postgres:postgres@db:5432/sprintsync
       SECRET_KEY: ${SECRET_KEY:-sprintsync-docker-dev-secret}
       AI_STUB_MODE: ${AI_STUB_MODE:-false}
-      GOOGLE_API_KEY: ${GOOGLE_API_KEY:-AIzaSyD41Pp-mrK-qRXhhHumI5oxeBCDiUSqUrQ}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
       APP_ENV: production
     depends_on:
       db:
