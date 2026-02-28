@@ -35,10 +35,16 @@ async def ai_suggest(
         return AISuggestResponse(type="description", **result)
 
     elif payload.type == "daily_plan":
-        # Get the current user's tasks
+        # Get tasks assigned to or created by the current user
+        from sqlalchemy import or_
         user_tasks = (
             db.query(Task)
-            .filter(Task.assignee_id == current_user.id)
+            .filter(
+                or_(
+                    Task.assignee_id == current_user.id,
+                    Task.created_by == current_user.id,
+                )
+            )
             .all()
         )
         result = await suggest_daily_plan(user_tasks)
