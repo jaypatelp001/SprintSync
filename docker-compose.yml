@@ -26,7 +26,7 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:postgres@db:5432/sprintsync
       SECRET_KEY: ${SECRET_KEY:-sprintsync-docker-dev-secret}
-      AI_STUB_MODE: ${AI_STUB_MODE:-false}
+      AI_STUB_MODE: false
       GOOGLE_API_KEY: ${GOOGLE_API_KEY}
       APP_ENV: production
     depends_on:
@@ -39,7 +39,7 @@ services:
       dockerfile: frontend/Dockerfile
     restart: unless-stopped
     ports:
-      - "5173:5173"
+      - "5173:8080"
     environment:
       VITE_API_URL: http://localhost:8000
     depends_on:
