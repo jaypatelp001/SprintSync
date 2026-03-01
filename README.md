@@ -2,9 +2,10 @@
 
 **AI-Powered Sprint Management Tool** — A lean internal tool for AI consultancies where engineers log work, track time, and leverage LLM-powered planning assistance.
 
-🔗 **Live Demo**: _[Deploy URL — will be added after deployment]_  
+🔗 **Live Frontend**: https://selfless-serenity-production-20cb.up.railway.app  
+🔗 **Live API**: https://sprintsync-production-f90e.up.railway.app  
 📺 **Video Walkthrough**: _[Loom link — will be added]_  
-📖 **API Docs**: `{LIVE_URL}/docs` (Swagger) | `{LIVE_URL}/redoc` (ReDoc)
+📖 **API Docs**: https://sprintsync-production-f90e.up.railway.app/docs
 
 ---
 
@@ -40,7 +41,7 @@
 | **Frontend**   | React 19, Vite 7, Vanilla CSS (dark theme)      |
 | **Database**   | PostgreSQL 15 (prod) / SQLite (dev/test)        |
 | **Auth**       | JWT (python-jose) + bcrypt (passlib)            |
-| **AI**         | OpenAI GPT-3.5-turbo + deterministic stub       |
+| **AI**         | Google Gemini 2.5 Flash + deterministic stub    |
 | **DevOps**     | Docker, docker-compose, GitHub Actions CI       |
 | **Testing**    | pytest, httpx, 16 tests                        |
 
@@ -66,7 +67,7 @@ docker-compose exec api python seed.py
 ```
 
 API: http://localhost:8000/docs  
-Frontend: Run separately with `cd frontend && npm run dev`
+Frontend: http://localhost:5173 (auto-started by docker-compose)
 
 ### Option 2: Local Development
 
@@ -161,7 +162,7 @@ The `/ai/suggest` endpoint supports two modes:
 2. **Daily plan mode**: Analyzes the user's current tasks and creates a prioritized plan
 
 **Dual-mode architecture:**
-- **Live LLM**: Calls OpenAI GPT-3.5-turbo when `AI_STUB_MODE=false` and `OPENAI_API_KEY` is set
+- **Live LLM**: Calls Google Gemini 2.5 Flash when `AI_STUB_MODE=false` and `GOOGLE_API_KEY` is set
 - **Deterministic stub**: Returns predictable JSON for tests and CI (`AI_STUB_MODE=true`)
 - **Graceful degradation**: If the LLM call fails, automatically falls back to stub with a warning
 

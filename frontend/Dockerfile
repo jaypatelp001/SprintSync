@@ -17,4 +17,4 @@ COPY --from=builder /app/dist ./dist
 
 # Railway injects PORT env var — serve reads it natively
 EXPOSE 8080
-CMD serve -s dist -l ${PORT:-8080}
+CMD serve -s dist -l tcp://0.0.0.0:${PORT:-8080}
