@@ -45,7 +45,7 @@ def get_metrics(db: Session = Depends(get_db)):
 
     # Latency histogram buckets
     buckets = [0.01, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0]
-    histogram = {f"le_{b}": sum(1 for l in latencies if l <= b) for b in buckets}
+    histogram = {f"le_{b}": sum(1 for lat in latencies if lat <= b) for b in buckets}
     histogram["count"] = len(latencies)
     histogram["sum"] = round(sum(latencies), 4) if latencies else 0
 
