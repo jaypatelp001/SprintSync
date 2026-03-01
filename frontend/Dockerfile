@@ -16,5 +16,5 @@ WORKDIR /app
 COPY --from=builder /app/dist ./dist
 
 # Railway injects PORT env var — serve reads it natively
-EXPOSE 3000
-CMD serve -s dist -l ${PORT:-3000}
+EXPOSE 8080
+CMD serve -s dist -l ${PORT:-8080}
