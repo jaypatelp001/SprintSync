@@ -2,10 +2,10 @@
 
 **AI-Powered Sprint Management Tool** — A lean internal tool for AI consultancies where engineers log work, track time, and leverage LLM-powered planning assistance.
 
-🔗 **Live Frontend**: https://selfless-serenity-production-20cb.up.railway.app  
-🔗 **Live API**: https://sprintsync-production-f90e.up.railway.app  
+🔗 **Live Frontend**: https://selfless-serenity-production-a6b0.up.railway.app  
+🔗 **Live API**: https://sprintsync-production-0bd2.up.railway.app  
 📺 **Video Walkthrough**: _[Loom link — will be added]_  
-📖 **API Docs**: https://sprintsync-production-f90e.up.railway.app/docs
+📖 **API Docs**: https://sprintsync-production-0bd2.up.railway.app/docs
 
 ---
 
