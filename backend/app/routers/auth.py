@@ -8,6 +8,7 @@ from app.models.user import User
 from app.schemas.user import UserRegister, UserLogin, TokenResponse, UserResponse
 from app.services.auth_service import hash_password, verify_password, create_access_token
 from app.dependencies import get_current_user
+from fastapi.security import OAuth2PasswordRequestForm
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -59,6 +60,23 @@ def login(payload: UserLogin, db: Session = Depends(get_db)):
         access_token=token,
         user=UserResponse.model_validate(user),
     )
+
+
+@router.post("/token", tags=["Authentication"])
+def swagger_login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    """OAuth2-compatible token endpoint for Swagger UI Authorize button.
+    
+    Use the 🔒 Authorize button in Swagger → enter username & password → all endpoints authenticate automatically.
+    """
+    user = db.query(User).filter(User.username == form_data.username).first()
+    if not user or not verify_password(form_data.password, user.hashed_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid username or password",
+        )
+
+    token = create_access_token(user.id, user.is_admin)
+    return {"access_token": token, "token_type": "bearer"}
 
 
 @router.get("/me", response_model=UserResponse)

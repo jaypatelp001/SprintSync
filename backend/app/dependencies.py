@@ -1,7 +1,7 @@
 """Shared dependencies for route injection — auth guards, DB session."""
 
 from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials, OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from jose import JWTError
 
@@ -9,15 +9,36 @@ from app.database import get_db
 from app.models.user import User
 from app.services.auth_service import decode_token
 
-security = HTTPBearer()
+# HTTPBearer for programmatic access, OAuth2 for Swagger UI
+security = HTTPBearer(auto_error=False)
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token", auto_error=False)
 
 
 def get_current_user(
-    credentials: HTTPAuthorizationCredentials = Depends(security),
+    bearer: HTTPAuthorizationCredentials = Depends(security),
+    oauth2_token: str = Depends(oauth2_scheme),
     db: Session = Depends(get_db),
 ) -> User:
-    """Extract and validate Bearer token, return the authenticated User."""
-    token = credentials.credentials
+    """Extract and validate Bearer token, return the authenticated User.
+    
+    Supports both:
+    - HTTPBearer (Authorization: Bearer <token>) for API clients
+    - OAuth2 password flow for Swagger UI
+    """
+    # Get token from either source
+    token = None
+    if bearer:
+        token = bearer.credentials
+    elif oauth2_token:
+        token = oauth2_token
+
+    if not token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid or expired token",
