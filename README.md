@@ -4,7 +4,7 @@
 
 🔗 **Live Frontend**: https://selfless-serenity-production-a6b0.up.railway.app  
 🔗 **Live API**: https://sprintsync-production-0bd2.up.railway.app  
-📺 **Video Walkthrough**: _[Loom link — will be added]_  
+📺 **Video Walkthrough**: [Loom Walkthrough](https://www.loom.com/share/6f39de545521498b94176d1d497cfb19)  
 📖 **API Docs**: https://sprintsync-production-0bd2.up.railway.app/docs
 
 ---
