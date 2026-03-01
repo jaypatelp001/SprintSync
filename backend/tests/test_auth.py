@@ -71,4 +71,4 @@ class TestAuthMe:
     def test_unauthenticated_request(self, client):
         """Request without token returns 403."""
         response = client.get("/auth/me")
-        assert response.status_code == 403
+        assert response.status_code == 401
