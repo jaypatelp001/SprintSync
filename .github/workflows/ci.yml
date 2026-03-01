@@ -32,7 +32,7 @@ jobs:
       - name: Run tests
         working-directory: ./backend
         env:
-          AI_STUB_MODE: "true"
+          AI_STUB_MODE: "false"
           DATABASE_URL: "sqlite:///./test.db"
         run: python -m pytest tests/ -v --tb=short
 

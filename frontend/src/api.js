@@ -2,11 +2,11 @@
  * SprintSync API Client — handles all HTTP requests to the backend.
  */
 
-const API_BASE = import.meta.env.VITE_API_URL || 'https://sprintsync-production-0bd2.up.railway.app';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 class ApiClient {
   constructor() {
-    this.token = localStorage.getItem('sprintsync_token');  
+    this.token = localStorage.getItem('sprintsync_token');
   }
 
   setToken(token) {

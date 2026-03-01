@@ -7,7 +7,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 # Force stub mode and SQLite for tests
-os.environ["AI_STUB_MODE"] = "true"
+os.environ["AI_STUB_MODE"] = "false"
 os.environ["DATABASE_URL"] = "sqlite:///./test.db"
 
 from app.database import Base, get_db
